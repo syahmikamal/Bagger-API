@@ -19,3 +19,13 @@ const Route = use('Route')
 Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
+
+Route.group(() => {
+
+  Route.post('sign-up', 'Auth/UserController.SignUp')
+
+  Route.post('sign-in', 'Auth/UserController.SignIn')
+
+  Route.get('verify-token', 'Auth/TokenController.VerifyToken')
+
+}).prefix('api/auth')
