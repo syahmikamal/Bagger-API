@@ -23,9 +23,11 @@ Route.get('/', () => {
 Route.group(() => {
 
   Route.post('sign-up', 'Auth/UserController.SignUp')
-
   Route.post('sign-in', 'Auth/UserController.SignIn')
+  Route.post('reset-email', 'Auth/UserController.SendResetMail')
+  Route.post('reset-password', 'Auth/UserController.ResetPassword')
 
   Route.get('verify-token', 'Auth/TokenController.VerifyToken')
+  Route.get('verify-reset-token', 'Auth/TokenController.VerifyResetToken')
 
 }).prefix('api/auth')
