@@ -67,7 +67,7 @@ class UserController {
 
                     //TODO: Send mail as notification for signing up
 
-                    return response.status(200).send({
+                    return response.status(201).send({
                         'status': true,
                         'message': 'Successfully register an account',
                         'data': {
@@ -144,12 +144,16 @@ class UserController {
                     const generateJWT = await auth.withRefreshToken().generate(user, { email, userId });
                     await Object.assign(user, generateJWT);
 
+                    //Query user information
+                    const userData = await Person.query().where('person_id', userId).first();
+
                     return response.status(200).send({
                         'status': true,
                         'message': 'Successfully sign in',
                         'data': {
                             'email'    : email,
                             'userId'   : userId,
+                            'name'     : userData.name,
                             'jwtToken' : generateJWT
                         }
                     })
