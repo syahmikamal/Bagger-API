@@ -4,6 +4,9 @@ const Database = use('Database');
 const Generate = use('App/Modules/RandomNumber');
 const { validateAll, rule } = use('Validator');
 const Hash = use('Hash');
+const Mail = use('Mail');
+const Env = use('Env')
+
 
 
 //Models
@@ -18,8 +21,8 @@ class UserController {
 
             const Validation = await validateAll(request.all(), {
                 personName: 'required|min:3|max:32',
-                email: 'required|email|max:100',
                 username: 'required|min:3|max:15',
+                email: 'required|email|max:100',          
                 password: [
                     rule('required'),
                     rule('min', 8),
@@ -66,6 +69,12 @@ class UserController {
                     })
 
                     //TODO: Send mail as notification for signing up
+                    await Mail.send('emails.welcome', PersonDB.toJSON(), (message) => {
+                        message
+                            .to(email)
+                            .from(Env.get('DEFAULT_FROM_EMAIL'))
+                            .subject('Hello guys')
+                    })
 
                     return response.status(201).send({
                         'status': true,
