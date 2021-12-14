@@ -52,6 +52,19 @@ class UserController {
 
                 if (!personExisted) {
 
+                    var objectSend = {
+                        'url': 'http://127.0.0.1:4200/verify-token/' + verifyToken,
+                        'username' : username
+                    };
+
+                    //TODO: Send mail as notification for signing up
+                    await Mail.send('emails.welcome',objectSend , (message) => {
+                        message
+                            .to(email)
+                            .from(Env.get('DEFAULT_FROM_EMAIL'))
+                            .subject('Hello guys')
+                    });
+
                     const UserDB = await User.create({
                         'user_id': userId,
                         'email': email,
@@ -66,14 +79,6 @@ class UserController {
                         'name': personName,
                         'username': username,
                         'description': 'Hello world!'
-                    })
-
-                    //TODO: Send mail as notification for signing up
-                    await Mail.send('emails.welcome', PersonDB.toJSON(), (message) => {
-                        message
-                            .to(email)
-                            .from(Env.get('DEFAULT_FROM_EMAIL'))
-                            .subject('Hello guys')
                     })
 
                     return response.status(201).send({
