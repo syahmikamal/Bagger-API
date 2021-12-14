@@ -23,7 +23,7 @@ class TokenController {
             }
 
             const {verifyToken} = await request.all()
-            const VerifyTokenExisted = await User.query('verifyToken', verifyToken).first()
+            const VerifyTokenExisted = await User.query().where('verifyToken', verifyToken).first();
 
             if (VerifyTokenExisted) {
 
