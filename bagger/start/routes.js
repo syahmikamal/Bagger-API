@@ -31,3 +31,9 @@ Route.group(() => {
   Route.get('verify-reset-token', 'Auth/TokenController.VerifyResetToken')
 
 }).prefix('api/auth')
+
+Route.group(() => {
+
+  Route.post('post-content', 'Post/PostController.PostContent')
+
+}).prefix('api/post')
