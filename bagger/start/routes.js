@@ -36,4 +36,10 @@ Route.group(() => {
 
   Route.post('post-content', 'Post/PostController.PostContent')
 
-}).prefix('api/post')
+}).prefix('api/post').middleware(['auth'], 'AdminMember')
+
+Route.group(() => {
+
+  Route.get('view-post', 'Post/PostController.ViewPost')
+
+}).prefix('api/get')
