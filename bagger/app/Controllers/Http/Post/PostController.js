@@ -1,6 +1,6 @@
 'use strict'
 
-const Databse = use('Database');
+const Database = use('Database');
 const Generate = use('App/Modules/RandomNumber')
 const { validateAll, rule } = use('Validator')
 
@@ -49,7 +49,7 @@ class PostController {
                 //query user info
                 var userInfo = await Person.query().where('person_id', userIsValid.user_id).first();
 
-                return response.status(200).send({
+                return response.status(201).send({
                     'status': true,
                     'message': 'Successfully posted a post',
                     'data': {
@@ -72,6 +72,51 @@ class PostController {
                 'message': 'Internal server error',
                 'data': '',
                 'error': 'PostContent error. '+error.toString() + '. (PostController.PostContent)'
+            })
+        }
+    }
+
+    async ViewPost({ request, response }) {
+        try {
+
+            const validation = await validateAll(request.all(), {
+                postId: 'required'
+            });
+
+            if(validation.fails()) {
+                return response.status(400).send({
+                    'status': false,
+                    'message': validation.messages(),
+                    'data': ''
+                })
+            }
+
+            const { postId } = await request.all();
+
+            //Query post info
+            const postData = await Database.from('posts')
+                                .innerJoin('users', function() {
+                                    this.on('posts.bagger_id', 'users.user_id')
+                                })
+                                .innerJoin('people', function() {
+                                    this.on('posts.bagger_id', 'people.person_id')
+                                })
+                                .where('posts.post_id', postId)
+                                .select('posts.id', 'post_id', 'post_title', 'post_content', 'posts.created_at', 'name', 'username')
+            
+            
+            return response.status(200).send({
+                'status': true,
+                'message': 'Successfully view a post',
+                'data': postData
+            })
+
+        } catch (error) {
+
+            return response.status(500).send({
+                'status': false,
+                'message': 'Internal server error',
+                'data': 'View post error.' + error.toString() + '. (PostController.ViewPost)'
             })
         }
     }
