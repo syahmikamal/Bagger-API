@@ -7,7 +7,7 @@ class PostSchema extends Schema {
   up () {
     this.create('posts', (table) => {
       table.increments()
-      table.string('bagger_id').unique()
+      table.string('bagger_id')
       table.string('post_id').notNullable().unique()
       table.string('post_title').nullable()
       table.longText('post_content').nullable()
