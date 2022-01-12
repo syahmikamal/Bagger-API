@@ -41,5 +41,6 @@ Route.group(() => {
 Route.group(() => {
 
   Route.get('view-post', 'Post/PostController.ViewPost')
+  Route.get('view-list-post', 'Post/PostController.ViewListPost')
 
 }).prefix('api/get')
